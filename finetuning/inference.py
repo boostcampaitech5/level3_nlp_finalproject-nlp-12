@@ -5,7 +5,7 @@ from utils.prompter import Prompter
 
 start = time.time()
 
-MODEL = "./lora_merged_model/test"
+MODEL = "./model/lora_merged/test"
 model = AutoModelForCausalLM.from_pretrained(
     MODEL,
     torch_dtype=torch.float16,
