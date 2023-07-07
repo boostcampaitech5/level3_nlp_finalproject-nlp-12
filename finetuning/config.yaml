@@ -32,5 +32,5 @@ group_by_length: True
 
 # wandb params
 wandb_entity: salmons
-wandb_project: final_jieun_test
-wandb_run_name: initial_test_run
+wandb_project: final_test
+wandb_run_name: test

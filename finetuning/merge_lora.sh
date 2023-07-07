@@ -5,5 +5,5 @@
 
 python3 ./utils/merge_lora.py \
     --base_model_path 'nlpai-lab/kullm-polyglot-12.8b-v2' \
-    --lora_path .model/lora_finetuned/test \
-    --target_model_path .model/lora_merged/test \
+    --lora_path ./model/lora_finetuned/test \
+    --target_model_path ./model/lora_merged/test \

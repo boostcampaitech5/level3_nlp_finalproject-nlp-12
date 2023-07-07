@@ -5,7 +5,7 @@ from utils.prompter import Prompter
 
 start = time.time()
 
-MODEL = "./lora_merged_model"
+MODEL = "./lora_merged_model/test"
 model = AutoModelForCausalLM.from_pretrained(
     MODEL,
     torch_dtype=torch.float16,
@@ -14,7 +14,7 @@ model = AutoModelForCausalLM.from_pretrained(
 tokenizer = AutoTokenizer.from_pretrained(MODEL)
 model.eval()
 
-prompter = Prompter("test_2")
+prompter = Prompter("kullm_test")
 
 def gen(x):
     inputs = tokenizer(
