@@ -36,11 +36,11 @@ def load_and_preprocess_data(train_args: TrainArguments, tokenizer: GPTNeoXToken
 
     def generate_and_tokenize_prompt(data_point):
         full_prompt = prompter.generate_prompt(
-            data_point["유저"],
-            data_point["챗봇"],
+            data_point["instruction"],
+            data_point["output"],
         )
         tokenized_full_prompt = tokenize(full_prompt)
-        user_prompt = prompter.generate_prompt(data_point["유저"])
+        user_prompt = prompter.generate_prompt(data_point["instruction"])
         tokenized_user_prompt = tokenize(user_prompt, add_eos_token=train_args.add_eos_token)
         user_prompt_len = len(tokenized_user_prompt["input_ids"]) - int(train_args.add_eos_token)
         tokenized_full_prompt["labels"] = [-100] * user_prompt_len + tokenized_full_prompt["labels"][user_prompt_len:]
