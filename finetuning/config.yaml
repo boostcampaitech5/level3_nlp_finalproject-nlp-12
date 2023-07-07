@@ -1,0 +1,36 @@
+---
+# model / data params
+base_model: nlpai-lab/kullm-polyglot-12.8b-v2
+data_path: ohilikeit/Empatheic_data
+output_dir: model/lora_finetuned/test
+prompt_template_name: kullm_test
+
+# training hyperparams
+batch_size: 256
+micro_batch_size: 64
+num_epochs: 3
+learning_rate: 3e-4
+cutoff_len: 512
+val_set_size: 200
+logging_steps: 1
+optimizer: adamw_torch
+eval_steps: 10
+weight_decay: 0.
+warmup_ratio: 0.1
+lr_scheduler_type: linear
+resume_from_checkpoint: None
+
+# lora hyperparams
+lora_r: 8
+lora_alpha: 16
+lora_dropout: 0.05
+lora_target_modules: [query_key_value, xxx]
+
+# llm hyperparams
+add_eos_token: True
+group_by_length: True
+
+# wandb params
+wandb_entity: salmons
+wandb_project: final_jieun_test
+wandb_run_name: initial_test_run
