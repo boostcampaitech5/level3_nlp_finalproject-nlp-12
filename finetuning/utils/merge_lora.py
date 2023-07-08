@@ -1,9 +1,8 @@
 import argparse
-
+import os
 import torch
 from peft import PeftModel
 from transformers import AutoModelForCausalLM, AutoTokenizer
-
 
 def apply_lora(base_model_path, lora_path, target_model_path):
     print(f"Loading the base model from {base_model_path}")
@@ -28,5 +27,8 @@ if __name__ == "__main__":
     parser.add_argument("--target_model_path", type=str, required=True)
 
     args = parser.parse_args()
+
+    # convert lora_path to absolute path
+    args.lora_path = os.path.abspath(args.lora_path)
 
     apply_lora(args.base_model_path, args.lora_path, args.target_model_path)
