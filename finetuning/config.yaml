@@ -1,14 +1,14 @@
 ---
 # model / data params
 base_model: nlpai-lab/kullm-polyglot-12.8b-v2
-data_path: ohilikeit/Empatheic_data
+data_path: ohilikeit/empathetic_dialogues_kr
 output_dir: model/lora_finetuned/test
 prompt_template_name: kullm_test
 
 # training hyperparams
 batch_size: 256
 micro_batch_size: 64
-num_epochs: 3
+num_epochs: 1
 learning_rate: 3e-4
 cutoff_len: 512
 val_set_size: 200
