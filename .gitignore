@@ -23,3 +23,6 @@ simple_inference.ipynb
 eda.ipynb
 config*.yaml
 merge_lora*.sh
+output_logs/
+train_nohup_*.sh
+inference_*.py

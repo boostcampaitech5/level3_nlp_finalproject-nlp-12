@@ -15,6 +15,7 @@ class TrainArguments(BaseModel):
     learning_rate: float = 3e-4
     cutoff_len: int = 512
     val_set_size: int = 200
+    save_total_limit: int = 10
     logging_steps: int = 1
     optimizer: str = "adamw_torch"
     eval_steps: int = 10

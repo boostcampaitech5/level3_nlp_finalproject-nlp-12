@@ -112,7 +112,7 @@ def train(train_args: TrainArguments):
         eval_steps=train_args.eval_steps if train_args.val_set_size > 0 else None,
         save_steps=train_args.eval_steps,
         output_dir=train_args.output_dir,
-        save_total_limit=3,
+        save_total_limit=train_args.save_total_limit,
         load_best_model_at_end=True if train_args.val_set_size > 0 else False,
         ddp_find_unused_parameters=None,
         group_by_length=train_args.group_by_length,

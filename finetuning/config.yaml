@@ -12,6 +12,7 @@ num_epochs: 3
 learning_rate: 3e-4
 cutoff_len: 512
 val_set_size: 200
+save_total_limit: 5
 logging_steps: 1
 optimizer: adamw_torch
 eval_steps: 10
