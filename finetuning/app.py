@@ -5,7 +5,7 @@ from peft import PeftModel, PeftConfig
 
 def load_model():
     """Load the local Hugging Face model."""
-    MODEL = "lora_merged_model" 
+    MODEL = "model/lora_merged/test" 
     model = AutoModelForCausalLM.from_pretrained(
         MODEL,
         torch_dtype=torch.float16,
