@@ -36,8 +36,8 @@ def load_and_preprocess_data(train_args: TrainArguments, tokenizer: GPTNeoXToken
 
     def generate_and_tokenize_prompt(data_point):
         full_prompt = prompter.generate_prompt(
-            data_point["instruction"],
-            data_point["output"],
+            instruction = data_point["instruction"],
+            label = data_point["output"],
         )
         tokenized_full_prompt = tokenize(full_prompt)
         user_prompt = prompter.generate_prompt(data_point["instruction"])

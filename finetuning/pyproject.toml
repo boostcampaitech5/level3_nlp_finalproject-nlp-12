@@ -2,7 +2,7 @@
 name = "finalproject"
 version = "1.0.0"
 description = "Large Langauge Model by Smoked_Salmons"
-authors = ["Jieun Park <imhappyhill@gmail.com>"]
+authors = ["Jihye Mun <munjh1121@gmail.com>", "Gyeongtaek Bahk <afterthougt@gmail.com>", "Jieun Park <imhappyhill@gmail.com>", "Inseo Song <songinseo0910@gmail.com>", "Jihwan Yoon <yjh091500@naver.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]

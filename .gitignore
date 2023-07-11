@@ -24,6 +24,7 @@ eda.ipynb
 simple_inference.ipynb
 inference_*.py
 config*.yaml
+test*.sh
 train_nohup_*.sh
 finetune_*.sh
 merge_lora*.sh
