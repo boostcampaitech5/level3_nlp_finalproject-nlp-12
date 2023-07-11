@@ -17,12 +17,6 @@ from utils.data_loader import *
 from utils.arguments import TrainArguments
 
 
-def load_config(config_file: str):
-    with open(config_file, 'r') as f:
-        config = yaml.safe_load(f)
-    return TrainArguments(**config)
-
-
 def train(train_args: TrainArguments):
     params = train_args.dict()
     print(
@@ -111,7 +105,7 @@ def train(train_args: TrainArguments):
         save_strategy="steps",
         eval_steps=train_args.eval_steps if train_args.val_set_size > 0 else None,
         save_steps=train_args.eval_steps,
-        output_dir=train_args.output_dir,
+        output_dir=train_args.finetune_dir,
         save_total_limit=train_args.save_total_limit,
         load_best_model_at_end=True if train_args.val_set_size > 0 else False,
         ddp_find_unused_parameters=None,
@@ -142,9 +136,15 @@ def train(train_args: TrainArguments):
     with torch.autocast("cuda"):
         trainer.train(resume_from_checkpoint=train_args.resume_from_checkpoint)
  
-    model.save_pretrained(train_args.output_dir)
+    model.save_pretrained(train_args.finetune_dir)
 
     print("\n If there's a warning about missing keys above, please disregard :)")
+
+
+def load_config(config_file: str):
+    with open(config_file, 'r') as f:
+        config = yaml.safe_load(f)
+    return TrainArguments(**config)
 
 
 def main():

@@ -2,7 +2,8 @@
 # model / data params
 base_model: nlpai-lab/kullm-polyglot-12.8b-v2
 data_path: ohilikeit/empathetic_dialogues_kr
-output_dir: model/lora_finetuned/test
+finetune_dir: model/lora_finetuned/test
+merge_dir: model/lora_merged/test
 prompt_template_name: kullm_test
 
 # training hyperparams

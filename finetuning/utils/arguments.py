@@ -4,9 +4,10 @@ from pydantic import BaseModel
 
 class TrainArguments(BaseModel):
     # model/data params
-    base_model: str = "nlpai-lab/kullm-polyglot-12.8b-v2"
-    data_path: str = "ohilikeit/Empatheic_data"
-    output_dir: str = ""
+    base_model: str = "beomi/polyglot-ko-12.8b-safetensors"
+    data_path: str = "ohilikeit/empathetic_dialogues_kr"
+    finetune_dir: str = ""
+    merge_dir: str = ""
     prompt_template_name: str = "kullm-v2"
     # training hyperparams
     batch_size: int = 128
