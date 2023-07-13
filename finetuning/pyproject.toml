@@ -1,16 +1,27 @@
 [tool.poetry]
-name = "kullm"
+name = "finalproject"
 version = "1.0.0"
 description = "Large Langauge Model by Smoked_Salmons"
 authors = ["Jihye Mun <munjh1121@gmail.com>", "Gyeongtaek Bahk <afterthougt@gmail.com>", "Jieun Park <imhappyhill@gmail.com>", "Inseo Song <songinseo0910@gmail.com>", "Jihwan Yoon <yjh091500@naver.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = ">=3.9,<3.9.7 || >3.9.7,<4.0"
-transformers = "^4.29.2"
+python = ">=3.9,<3.9.7 || >3.9.7,<3.13"
+transformers = "^4.30.2"
 torch = "2.0.0"
-accelerate = "^0.19.0"
-
+accelerate = "^0.20.1"
+datasets = "^2.13.1"
+tqdm = "^4.65.0"
+pandas = "^2.0.2"
+omegaconf = "^2.3.0"
+wandb = "^0.15.4"
+huggingface-hub = "^0.16.4"
+scipy = "^1.11.1"
+fire = "^0.5.0"
+gradio = "^3.36.1"
+langchain = "^0.0.228"
+bitsandbytes = "^0.39.1"
+peft = { git = "https://github.com/huggingface/peft.git" }
 
 [tool.black]
 line-length = 79
@@ -20,7 +31,6 @@ include_trailing_comma = true
 line_length = 79
 multi_line_output = 3
 profile = "black"
-
 
 [build-system]
 requires = ["poetry-core"]
