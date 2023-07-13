@@ -2,6 +2,11 @@
 
 config=("config.yaml")
 
+# Check if output_logs directory exists, if not, create it
+if [ ! -d "output_logs" ]; then
+  mkdir output_logs
+fi
+
 echo "Start finetuning with ${config}..."
 nohup python3 train.py "${config}" > output_logs/output.txt 2>&1 &
 wait $!
