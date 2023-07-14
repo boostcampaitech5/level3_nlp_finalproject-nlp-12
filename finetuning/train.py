@@ -129,7 +129,7 @@ def train(train_args: TrainArguments):
         data_collator=transformers.DataCollatorForSeq2Seq(
             tokenizer, pad_to_multiple_of=8, return_tensors="pt", padding=True
         ),
-        compute_metrics=compute_metrics
+        compute_metrics=train_compute_metrics,
     )
     model.config.use_cache = False
 

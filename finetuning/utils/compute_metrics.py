@@ -1,17 +1,48 @@
 from datasets import load_metric
-from transformers import AutoTokenizer, GPTNeoXTokenizerFast, GPTNeoXForCausalLM
+from transformers import GPTNeoXTokenizerFast, GPTNeoXForCausalLM
 import numpy as np
 from rouge import Rouge
+from statistics import geometric_mean
 import torch
-from statistics import geometric_mean, mean
+from tqdm import tqdm
 
 
-def compute_metrics(pred):
-    base_model = 'nlpai-lab/kullm-polyglot-12.8b-v2'
-    tokenizer = GPTNeoXTokenizerFast.from_pretrained(base_model)
-    
+def train_compute_metrics(pred):
+    model = GPTNeoXForCausalLM.from_pretrained('nlpai-lab/kullm-polyglot-12.8b-v2')
+
+    logits = torch.tensor(pred.predictions.argmax(-1).flatten(), dtype=torch.int64)
+    logits = logits.unsqueeze(0)  # torch.Size([1, 35200])
+
+    max_length = 2048
+    stride = 1024
+    seq_len = logits.size(1)
+
+    nlls = []
+    for i in tqdm(range(0, seq_len, stride)):
+        begin_loc = max(i + stride - max_length, 0)
+        end_loc = min(i + stride, seq_len)
+        trg_len = end_loc - i  # may be different from stride on last loop
+
+        input_ids = logits[:, begin_loc:end_loc]
+        target_ids = input_ids.clone()
+        target_ids[:, :-trg_len] = -100
+
+        with torch.no_grad():
+            outputs = model(input_ids, labels=target_ids)
+            neg_log_likelihood = outputs[0] * trg_len
+
+        nlls.append(neg_log_likelihood)
+
+    loss_sw = torch.stack(nlls).sum() / end_loc
+    ppl = torch.exp(loss_sw)
+
+    return {'perplexity_sw':ppl}
+
+
+def test_compute_metrics(pred):
+    tokenizer = GPTNeoXTokenizerFast.from_pretrained('nlpai-lab/kullm-polyglot-12.8b-v2')
+
     # 사용할 metric을 불러옵니다.
-    metric_perplexity = load_metric("perplexity")
     metric_bleu = load_metric("sacrebleu")
     metric_meteor = load_metric("meteor")
     metric_rouge = Rouge(metrics=["rouge-1", "rouge-2", "rouge-3", "rouge-4", "rouge-5", "rouge-l"])
@@ -22,42 +53,29 @@ def compute_metrics(pred):
     labels = pred.label_ids
     labels = np.where(pred.label_ids != -100, labels, tokenizer.pad_token_id)
 
-    # 각 preds, labels 쌍 마다 score를 계산하고 저장하는 리스트 입니다. 
-    ppl, bleu, meteor, rouge, bert = [], [], [], [], []
+    scores = {
+        'sacre_bleu': [],
+        'meteor': [],
+        'rouge_l_f1': [],
+        'bert_score_f1': [],
+    }
 
-    for i in range(len(preds)) :
-        # 숫자로 표현되어 있는 preds, labels 자연어로 decode 합니다. 
-        # 이때, preds에는 프롬프트가 같이 생성이 됩니다. 따라서 "### 응답:" 이후로 생성되는 문장만 decode 합니다.
+    for i in range(len(preds)):
         decoded_preds = tokenizer.decode(preds[i], skip_special_tokens=True)
         decoded_labels = tokenizer.decode(labels[i], skip_special_tokens=True)
-        if "### 응답:" in decoded_preds :
+        if "### 응답:" in decoded_preds:
             decoded_preds = decoded_preds.split('### 응답:\n')[1][:-1]
 
-        # score를 계산합니다. 각 compute 마다 주어져야 하는 predictions, references의 형식이 다름에 주의해 주십시오.
-        ppl_score = metric_perplexity.compute(model_id='gpt2', add_start_token=False, input_texts=decoded_preds.split())['mean_perplexity']
         bleu_score = metric_bleu.compute(predictions=[decoded_preds], references=[[decoded_labels]])["score"]
         meteor_score = metric_meteor.compute(predictions=[decoded_preds], references=[decoded_labels])["meteor"]
         rouge_scores = metric_rouge.get_scores(decoded_preds, decoded_labels, avg=True)["rouge-l"]['f']
         bert_score = metric_bertscore.compute(predictions=[decoded_preds], references=[decoded_labels], lang='ko')["f1"][0]
 
-        ppl.append(ppl_score)
-        bleu.append(bleu_score/100)
-        meteor.append(meteor_score)
-        rouge.append(rouge_scores)
-        bert.append(bert_score)
+        scores['sacre_bleu'].append(bleu_score / 100)
+        scores['meteor'].append(meteor_score)
+        scores['rouge_l_f1'].append(rouge_scores)
+        scores['bert_score_f1'].append(bert_score)
 
-    # 각자 계산된 값을 산술평균 또는 기하평균 합니다.
-    perplexity = mean(ppl)
-    bleu_score = geometric_mean(bleu)
-    meteor_score = geometric_mean(meteor)
-    rouge_scores = geometric_mean(rouge)
-    bert_score = geometric_mean(bert)
+    scores = {k: geometric_mean(v) for k, v in scores.items()}
 
-
-    return {
-        'perplexity': round(perplexity, 5), 
-        'sacre_bleu': round(bleu_score, 5),
-        'meteor': round(meteor_score, 5),
-        'rouge_l_f1': round(rouge_scores, 5),
-        'bert_score_f1' : round(bert_score, 5),
-    }
+    return {k: round(v, 5) for k, v in scores.items()}
