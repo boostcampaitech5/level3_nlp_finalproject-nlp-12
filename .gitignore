@@ -28,3 +28,4 @@ test*.sh
 train_nohup_*.sh
 finetune_*.sh
 merge_lora*.sh
+.env
