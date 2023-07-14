@@ -8,35 +8,40 @@ from tqdm import tqdm
 
 
 def train_compute_metrics(pred):
+
     model = GPTNeoXForCausalLM.from_pretrained('nlpai-lab/kullm-polyglot-12.8b-v2')
 
     logits = torch.tensor(pred.predictions.argmax(-1).flatten(), dtype=torch.int64)
     logits = logits.unsqueeze(0)  # torch.Size([1, 35200])
 
-    max_length = 2048
+    max_length = model.config.max_position_embeddings # 2048
     stride = 1024
     seq_len = logits.size(1)
 
     nlls = []
-    for i in tqdm(range(0, seq_len, stride)):
-        begin_loc = max(i + stride - max_length, 0)
-        end_loc = min(i + stride, seq_len)
-        trg_len = end_loc - i  # may be different from stride on last loop
-
+    prev_end_loc = 0
+    for begin_loc in tqdm(range(0, seq_len, stride)):
+        end_loc = min(begin_loc + max_length, seq_len)
+        trg_len = end_loc - prev_end_loc  # 마지막 루프의 스트라이드 값과 다를 수 있음
         input_ids = logits[:, begin_loc:end_loc]
         target_ids = input_ids.clone()
         target_ids[:, :-trg_len] = -100
 
         with torch.no_grad():
             outputs = model(input_ids, labels=target_ids)
-            neg_log_likelihood = outputs[0] * trg_len
+
+            # 손실은 모든 유효한 레이블에 대한 평균값을 구하는 교차 엔트로피(cross entropy)로 계산됩니다.
+            # 나이브 베이지안 모델은 내부적으로 레이블을 왼쪽으로 1개씩 밀기 때문에, (타켓 - 1)개 만큼의 레이블에 대해 손실을 계산합니다.
+            neg_log_likelihood = outputs.loss
 
         nlls.append(neg_log_likelihood)
+        prev_end_loc = end_loc
+        if end_loc == seq_len:
+            break
 
-    loss_sw = torch.stack(nlls).sum() / end_loc
-    ppl = torch.exp(loss_sw)
+    ppl = torch.exp(torch.stack(nlls).mean())
 
-    return {'perplexity_sw':ppl}
+    return {'perplexity':ppl}
 
 
 def test_compute_metrics(pred):
