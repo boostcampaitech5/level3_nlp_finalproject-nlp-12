@@ -36,8 +36,8 @@ class Prompter(object):
 
         # 멀티 턴 대화 처리하는 부분
         def converter(sentence):
-            result = re.sub(r"질문\s*", "input", sentence)
-            result = re.sub(r"답변\s*", "response", result)
+            result = re.sub(r"질문\s*", "### 명령어", sentence)
+            result = re.sub(r"답변\s*", "### 응답", result)
 
             return result
         
@@ -45,9 +45,9 @@ class Prompter(object):
         new_instruction = instruction.split('\n')[-1]
         history = instruction[:-len(new_instruction)]
         try:
-            new_instruction = new_instruction.split('input: ')[1]
+            new_instruction = new_instruction.split('### 명령어: ')[1]
         except:
-            new_instruction = new_instruction.split('input: ')[0]
+            new_instruction = new_instruction.split('### 명령어: ')[0]
 
         res = self.template["prompt"].format(history=history, instruction=new_instruction)
 
