@@ -24,6 +24,7 @@ class TrainArguments(BaseModel):
     warmup_ratio: float = 0.1
     lr_scheduler_type: str = 'linear'
     resume_from_checkpoint: str = None
+    use_compute_metrics: bool = False
     # lora hyperparams
     lora_r: int = 32
     lora_alpha: int = 64

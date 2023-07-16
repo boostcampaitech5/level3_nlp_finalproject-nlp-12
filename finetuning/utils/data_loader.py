@@ -11,6 +11,8 @@ def load_and_preprocess_data(train_args: TrainArguments, tokenizer: GPTNeoXToken
     else:
         data = load_dataset(train_args.data_path)
 
+    print(data)
+
     prompter = Prompter(template_name = train_args.prompt_template_name,
                         verbose = False)
 
