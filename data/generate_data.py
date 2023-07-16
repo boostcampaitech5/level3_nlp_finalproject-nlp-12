@@ -10,10 +10,10 @@ from tqdm import tqdm
 
 def generate_conversation(
     input_prompt_path: str,
-    output_path: str,
+    output_csv_path: str,
     model_name: str = "gpt-3.5-turbo",
     generation_count: int = 1,
-    temperature: float = 0.2,
+    temperature: float = 0.7,
 ) -> None:
     """OpenAI API를 사용한 멀티-턴 대화 데이터 생성 함수.
 
@@ -31,15 +31,15 @@ def generate_conversation(
         chat_open_ai = ChatOpenAI(model_name=model_name, temperature=temperature)
         response = chat_open_ai.predict(prompt)
         json_data = json.loads(response)
-        
+
         # Creating pandas DataFrame from json
         df = pd.DataFrame(json_data)
 
         # Check if file exists to determine whether header is needed
-        if os.path.isfile(output_path):
-            df.to_csv(output_path, mode='a', header=False, index=False)
+        if os.path.isfile(output_csv_path):
+            df.to_csv(output_csv_path, mode='a', header=False, index=False)
         else:
-            df.to_csv(output_path, mode='w', header=True, index=False)
+            df.to_csv(output_csv_path, mode='w', header=True, index=False)
 
 
 def main():
@@ -48,19 +48,19 @@ def main():
     parser = argparse.ArgumentParser(description="Generate data using OpenAI API")
     parser.add_argument("--input_prompt_path", type=str, default="data/input_prompt.txt",
                         help="Path to the prompt template file")
-    parser.add_argument("--output_path", type=str, default="data/output_conversation.csv",
+    parser.add_argument("--output_csv_path", type=str, default="data/output_conversation.csv",
                         help="Path to the output file")
     parser.add_argument("--generation_count", type=int, default=1,
                         help="API call count")
     parser.add_argument("--model_name", type=str, default="gpt-3.5-turbo",
                         help="GPT model")
-    parser.add_argument("--temperature", type=float, default=0.2,
+    parser.add_argument("--temperature", type=float, default=0.7,
                         help="Randomness of conversation data to be generated")
     args = parser.parse_args()
 
     generate_conversation(
         args.input_prompt_path,
-        args.output_path,
+        args.output_csv_path,
         args.model_name,
         args.generation_count,
         args.temperature,
