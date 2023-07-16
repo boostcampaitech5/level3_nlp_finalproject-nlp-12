@@ -1,0 +1,10 @@
+I need 3 pairs of text examples of multi-turn conversation (human utterance - AI response format) in Korean.
+
+[Example]
+```csv
+instruction, output
+"발화: 오늘은 뭔가 빠르게 집에 가서 쉬고 싶어. 일이 힘들어","답변: 저런.. 가끔 그럴때가 있죠. 집에 가서 얼른 쉬시는게 좋을 것 같아요. 오늘은 특히나 어떤 점이 힘드셨어요?"
+```
+
+[Conditions]
+- One turn means 'one utterance - one response'.
