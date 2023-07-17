@@ -1,13 +1,15 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import './App.css';
-import Message from './message';
+import packageJson from '../package.json'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSpinner, faArrowTurnDown, faEraser } from '@fortawesome/free-solid-svg-icons'
 
+import './App.css';
+import Message from './message';
 
-const API_SERVER = '' // package.json의 proxy와 같은 주소 입력
+axios.defaults.baseURL = packageJson.proxy;
+axios.defaults.withCredentials = true;
 
 function App() {
 
@@ -18,11 +20,11 @@ function App() {
 
   const getMsg = async () => {
     await axios.get(
-      API_SERVER, {withCredentials:true}
+      '/'
       ).then(response =>{
-      setMsgList(response.data.msg_list);
-      setUserID(response.data.user_id)
-      setShowing(true);
+        setMsgList(response.data.msg_list);
+        setUserID(response.data.user_id);
+        setShowing(true);
     })
     .catch(error => {
       console.error('error', error);
@@ -36,7 +38,7 @@ function App() {
       var current_msg_text = msg_text;
       setMsgText('')
       await axios.post(
-            API_SERVER,
+            '/',
             {
                 user_id: user_id,
                 msg_text: current_msg_text,
