@@ -21,6 +21,7 @@ weight_decay: 0.
 warmup_ratio: 0.1
 lr_scheduler_type: linear
 resume_from_checkpoint: None
+use_compute_metrics: False
 
 # lora hyperparams
 lora_r: 8

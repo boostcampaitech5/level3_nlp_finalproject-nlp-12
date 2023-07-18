@@ -15,6 +15,7 @@ from peft import (
 from transformers import GPTNeoXForCausalLM, GPTNeoXTokenizerFast, BitsAndBytesConfig
 from utils.data_loader import *
 from utils.arguments import TrainArguments
+from utils.compute_metrics import *
 
 
 def train(train_args: TrainArguments):
@@ -122,6 +123,7 @@ def train(train_args: TrainArguments):
         data_collator=transformers.DataCollatorForSeq2Seq(
             tokenizer, pad_to_multiple_of=8, return_tensors="pt", padding=True
         ),
+        compute_metrics=train_compute_metrics if train_args.use_compute_metrics else None,
     )
     model.config.use_cache = False
 
@@ -135,6 +137,9 @@ def train(train_args: TrainArguments):
 
     with torch.autocast("cuda"):
         trainer.train(resume_from_checkpoint=train_args.resume_from_checkpoint)
+
+    evaluation_result = trainer.evaluate(eval_dataset=val_data)
+    print(evaluation_result)
  
     model.save_pretrained(train_args.finetune_dir)
 
