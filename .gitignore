@@ -5,6 +5,7 @@
 
 *.log
 *.out
+*.csv
 
 __pycache__
 cache*
@@ -23,6 +24,7 @@ test*.json
 eda.ipynb
 simple_inference.ipynb
 inference_*.py
+generation.py
 config*.yaml
 test*.sh
 train_nohup_*.sh
