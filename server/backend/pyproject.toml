@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "finalproject"
+version = "0.1.0"
+description = "FastAPI Server for finalproject by Smoked_Salmons"
+authors = ["Jihye Mun <munjh1121@gmail.com>", "Gyeongtaek Bahk <afterthougt@gmail.com>", "Jieun Park <imhappyhill@gmail.com>", "Inseo Song <songinseo0910@gmail.com>", "Jihwan Yoon <yjh091500@naver.com>"]
+license = "MIT"
+readme = "README.md"
+packages = [{include = "config"}]
+
+[tool.poetry.dependencies]
+python = ">=3.7, <3.10"
+fastapi = "^0.70.0"
+uvicorn = "^0.15.0"
+motor = "^3.2.0"
+pydantic = "1.10.9"
+pymongo = "^4.4.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^6.2.5"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
