@@ -31,6 +31,8 @@ openai = "^0.27.8"
 python-dotenv = "^1.0.0"
 faiss-cpu = "^1.7.4"
 faiss-gpu = "^1.7.2"
+urllib3 = "1.26.11"
+rouge = "^1.0.1"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^6.2.5"
