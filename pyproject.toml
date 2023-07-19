@@ -33,6 +33,8 @@ faiss-cpu = "^1.7.4"
 faiss-gpu = "^1.7.2"
 urllib3 = "1.26.11"
 rouge = "^1.0.1"
+sklearn = "^0.0.post7"
+scikit-learn = "^1.3.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^6.2.5"
