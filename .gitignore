@@ -18,6 +18,7 @@ outputs/
 output_logs/
 wandb/
 notebooks/
+node_modules/
 
 __init__.py
 test*.json
