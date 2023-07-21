@@ -3,13 +3,23 @@ import time
 import yaml
 
 import torch
-from transformers import AutoModelForCausalLM, AutoTokenizer
+from transformers import AutoModelForCausalLM, AutoTokenizer, TextStreamer
 
 from utils.arguments import TrainArguments
 from utils.prompter import Prompter
 
 
 def inference(train_args: TrainArguments):
+    """
+    주어진 TrainArguments에 따라 inference를 수행합니다.
+
+    Args:
+        train_args (TrainArguments): 모델과 관련한 인자들을 포함한 TrainArguments 객체
+
+    Returns:
+        None
+    """
+    
     start = time.time()
 
     MODEL = train_args.merge_dir
@@ -19,6 +29,7 @@ def inference(train_args: TrainArguments):
         low_cpu_mem_usage=True,
     ).to(device=f"cuda", non_blocking=True)
     tokenizer = AutoTokenizer.from_pretrained(MODEL)
+    streamer = TextStreamer(tokenizer)
     model.eval()
 
     prompter = Prompter(train_args.prompt_template_name)
@@ -32,6 +43,7 @@ def inference(train_args: TrainArguments):
         inputs = {name: tensor.to(model.device) for name, tensor in inputs.items()} # move to same device as model
         gened = model.generate(
             **inputs, 
+            streamer=streamer,
             max_new_tokens=256,
             early_stopping=True,
             do_sample=True,
@@ -49,6 +61,7 @@ def inference(train_args: TrainArguments):
         print(tokenizer.decode(gened_list))
 
     end = time.time()
+
     print(f'generation 하기 직전까지 걸린 시간 : {int(end-start)}초')
 
     messages = ['오늘 날씨가 맑아서 기분이 좋아요!',
