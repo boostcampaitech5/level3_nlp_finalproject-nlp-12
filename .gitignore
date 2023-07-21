@@ -22,11 +22,14 @@ node_modules/
 
 __init__.py
 test*.json
+*prompt*.txt
 eda.ipynb
 simple_inference.ipynb
+langchain_inference_*.ipynb
 inference_*.py
 generation.py
 config*.yaml
+generate*.sh
 test*.sh
 train_nohup_*.sh
 finetune_*.sh
