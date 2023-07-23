@@ -1,10 +1,11 @@
 from fastapi import FastAPI, Cookie, Response, status
 from fastapi.responses import JSONResponse, RedirectResponse
 from fastapi.middleware.cors import CORSMiddleware
-from motor.motor_asyncio import AsyncIOMotorClient
+from pymongo import MongoClient
 import uvicorn
 
 from config.settings import settings
+from mary import Mary
 from models import MsgModel, MsgHistoryModel
 
 from typing import Optional
@@ -16,7 +17,7 @@ app = FastAPI()
 # React 서버 설정
 app.add_middleware(
     CORSMiddleware,
-    allow_origins       = [f'http://localhost:{settings.REACT_PORT}'],
+    allow_origins       = [f'http://localhost:{settings.ServerSetting.REACT_PORT}'],
     allow_credentials   = True,
     allow_methods       = ['GET', 'POST', 'OPTIONS', 'DELETE'],
     allow_headers       = ['*']
@@ -32,20 +33,19 @@ async def startup():
     '''
 
     # MongoDB 클라이언트 연결
-    app.mongodb_client = AsyncIOMotorClient(
-        settings.DB_URL,
-        username=settings.USERNAME,
-        password=settings.PASSWORD
-    )
-    app.mongodb = app.mongodb_client[settings.DB_NAME][settings.COLLECTION]
+    app.mongodb_client = MongoClient(settings.DatabaseSetting.DB_URL)
+    app.mongodb        = app.mongodb_client[settings.DatabaseSetting.DB_NAME]
+    
+    # 개별 메시지 저장 collection 설정
+    app.user_data      = app.mongodb[settings.DatabaseSetting.COLLECTION]
 
-    # TO-DO: 모델 로드 및 초기화 코드
-
+    # 모델 로드 및 초기화
+    app.mary = Mary(settings.ModelSetting, app.mongodb)
 
 @app.on_event('shutdown')
 async def shutdown():
     '''
-    FastAPI 서버 종료
+    FastAPI 서버 종료시 호출
     '''
 
     # MongoDB 클라이언트 연결 종료
@@ -53,18 +53,18 @@ async def shutdown():
 
 
 @app.get('/', response_model=MsgHistoryModel)
-async def load_conversation(response: Response, user_id: Optional[str] = Cookie(None)):
+def load_conversation(response: Response, user_id: Optional[str] = Cookie(None)):
     '''
     유저 및 메시지 히스토리 조회
     '''
     if not user_id:
         user_id = secrets.token_hex(16)
         response.set_cookie(key='user_id', value=user_id, httponly=True)
-        await init_user(user_id)
+        init_user(user_id)
 
     # user_id에 해당하는 전체 메시지 히스토리를 DB에서 조회
     messages = []
-    for doc in await app.mongodb.find({'user_id':user_id}).to_list(length=300):
+    for doc in app.user_data.find({'user_id':user_id}):
         messages.append(to_dict(doc))
     
     history = MsgHistoryModel(msg_list=messages, user_id=user_id)
@@ -72,63 +72,62 @@ async def load_conversation(response: Response, user_id: Optional[str] = Cookie(
 
 
 @app.post('/', response_description='add_new_message', response_model=MsgModel)
-async def message_input(request: MsgModel) -> JSONResponse:
+def message_input(request: MsgModel) -> JSONResponse:
     '''
     유저 메시지 처리
     '''
-    await insert_msg(request)
-    inserted_bot_msg = await dummy_response(request.user_id, request.msg_text)
-    bot_response = await app.mongodb.find_one({'_id': inserted_bot_msg})
+    insert_msg(request)
+
+    # 유저 메시지에 대한 응답 생성
+    bot_response = app.mary.get_response(request.msg_text, request.user_id)
+
+    # 생성된 응답을 DB에 저장
+    response_msg = MsgModel(user_id=request.user_id, msg_text=bot_response, bot=True)
+    inserted_bot_msg = insert_msg(response_msg)
+
+    # 저장된 응답을 DB에서 다시 불러와 JSONResponse로 반환
+    bot_response = app.user_data.find_one({'_id': inserted_bot_msg})
     return JSONResponse(status_code=status.HTTP_201_CREATED, content=to_dict(bot_response))
 
 
 @app.delete('/')
-async def reset_conversation() -> RedirectResponse:
+def reset_conversation() -> RedirectResponse:
     '''
     TO-DO: 현재 유저 초기화 및 DB에서 해당 유저 메시지 삭제
     '''
     return RedirectResponse(url='/', status_code=200, headers={})
 
 
-async def insert_msg(msg: MsgModel):
+def insert_msg(msg: MsgModel):
     '''
     DB에 메시지 insert
     '''
-    add_msg = await app.mongodb.insert_one(msg.dict())
+    add_msg = app.user_data.insert_one(msg.dict())
     return add_msg.inserted_id
 
 
-async def init_user(user_id: str):
+def init_user(user_id: str):
     '''
     cookie에 user_id가 설정되어 있지 않은 경우 최초 메시지 생성
     '''
     welcome_msg = MsgModel(user_id=user_id, msg_text='nice to meet you...', bot=True)
-    insert_new_msg = await insert_msg(welcome_msg)
+    insert_new_msg = insert_msg(welcome_msg)
     return insert_new_msg
 
 
 def to_dict(msg) -> dict:
     return {
-        'id'        : str(msg['_id']),
         'user_id'   : str(msg['user_id']),
         'msg_text'  : str(msg['msg_text']),
         'bot'       : bool(msg['bot'])
     }
 
 
-async def dummy_response(user_id: str, msg_text:str):
-    '''
-    모델이 연결되지 않은 경우에 자동으로 유저 메시지에 응답
-    모델이 연결되고 나면 사용하지 않음
-    '''
-    dummy_msg = MsgModel(user_id=user_id, msg_text=f'echo:{msg_text}', bot=True)
-    insert_new_msg = await insert_msg(dummy_msg)
-    return insert_new_msg
-
-
 if __name__=='__main__':
     uvicorn.run(
-        app,
-        host=settings.HOST,
-        port=settings.PORT
+        'app:app',
+        host=settings.ServerSetting.HOST,
+        port=settings.ServerSetting.PORT,
+        timeout_keep_alive=50,
+        reload=True
     )
