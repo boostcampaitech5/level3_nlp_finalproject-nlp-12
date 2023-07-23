@@ -106,7 +106,7 @@ class Mary:
             collection, embedding_fn
         )
 
-        template = """이전 대화와 현재 대화의 input을 참고하여 상황에 공감하고 친절한 답변을 생성해주세요. 답변 마지막에는 지금까지의 내용과 관련된 질문을 해주세요.\n\n[이전 대화]\n{history}\n\n[현재 대화]\n### 명령어: {### 명령어}\n\n### 응답:\n"""
+        template = """이전 대화와 현재 대화의 명령어를 참고하여 상황에 공감하고 친절한 응답을 생성해주세요. 응답 마지막에는 지금까지의 내용과 관련된 질문을 해주세요.\n\n[이전 대화]\n{history}\n\n[현재 대화]\n### 명령어:\n{### 명령어}\n\n### 응답:\n"""
 
         self.prompt = PromptTemplate(
             input_variables=["history", "### 명령어"], template=template
