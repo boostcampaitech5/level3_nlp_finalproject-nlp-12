@@ -2,7 +2,6 @@ from pydantic import BaseModel
 from typing import Optional
 
 class MsgModel(BaseModel):
-    id: Optional[str]
     user_id: str
     msg_text: str
     bot: bool
