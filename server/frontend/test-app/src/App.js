@@ -68,8 +68,17 @@ function App() {
     }
   }
 
-  const test = () => { // reset버튼을 위한 callback 함수 프로토타입
-    console.log('reset')
+  const deleteMsg = () => { // reset버튼을 위한 callback 함수 프로토타입
+    axios.delete(
+      '/'
+    ).then((response) =>{
+      console.log(response)
+      setMsgText('');
+      getMsg();
+    }
+    ).catch((error) => {
+      console.log(error)
+    });
   };
 
   useEffect(() => {
@@ -103,7 +112,7 @@ function App() {
             </div>
                 {/* TODO: add callback func */}
                 {/* TODO: add hover animation */}
-                <FontAwesomeIcon className='Eraser' icon={faEraser} style={{color: "#000000", padding: '50px'}} onClick={test} />
+                <FontAwesomeIcon className='Eraser' icon={faEraser} style={{color: "#000000", padding: '50px'}} onClick={deleteMsg} />
         파이렝...
         </header>
       </div>

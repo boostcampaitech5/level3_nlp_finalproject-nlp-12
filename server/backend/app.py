@@ -38,7 +38,8 @@ async def startup():
     
     # 개별 메시지 저장 collection 설정
     app.user_data      = app.mongodb[settings.DatabaseSetting.COLLECTION]
-
+    app.message_store  = app.mongodb[settings.ModelSetting.COLLECTION]
+    
     # 모델 로드 및 초기화
     app.mary = Mary(settings.ModelSetting, app.mongodb)
 
@@ -91,11 +92,16 @@ def message_input(request: MsgModel) -> JSONResponse:
 
 
 @app.delete('/')
-def reset_conversation() -> RedirectResponse:
+def reset_conversation(response: Response, user_id: Optional[str] = Cookie(None)) -> RedirectResponse:
     '''
     TO-DO: 현재 유저 초기화 및 DB에서 해당 유저 메시지 삭제
     '''
-    return RedirectResponse(url='/', status_code=200, headers={})
+    app.user_data.delete_many({'user_id':user_id})
+    app.message_store.delete_many({'user_id':user_id})
+    
+    response.delete_cookie(key='user_id')
+    response.status_code = status.HTTP_200_OK
+    return response
 
 
 def insert_msg(msg: MsgModel):
