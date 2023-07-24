@@ -10,6 +10,7 @@ from models import MsgModel, MsgHistoryModel
 
 from typing import Optional
 import secrets
+import random
 
 
 app = FastAPI()
@@ -42,6 +43,12 @@ async def startup():
     
     # 모델 로드 및 초기화
     app.mary = Mary(settings.ModelSetting, app.mongodb)
+
+    # 첫번째 메시지 로드
+    app.welcome_msg = []
+    with open('./welcome_msg.txt', 'r', encoding='utf8') as f:
+        app.welcome_msg = f.readlines()
+
 
 @app.on_event('shutdown')
 async def shutdown():
@@ -98,7 +105,7 @@ def reset_conversation(response: Response, user_id: Optional[str] = Cookie(None)
     '''
     app.user_data.delete_many({'user_id':user_id})
     app.message_store.delete_many({'user_id':user_id})
-    
+
     response.delete_cookie(key='user_id')
     response.status_code = status.HTTP_200_OK
     return response
@@ -116,7 +123,9 @@ def init_user(user_id: str):
     '''
     cookie에 user_id가 설정되어 있지 않은 경우 최초 메시지 생성
     '''
-    welcome_msg = MsgModel(user_id=user_id, msg_text='nice to meet you...', bot=True)
+    welcome_msg = MsgModel(user_id=user_id,
+                           msg_text=random.choice(app.welcome_msg),
+                           bot=True)
     insert_new_msg = insert_msg(welcome_msg)
     return insert_new_msg
 
