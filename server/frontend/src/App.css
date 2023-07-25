@@ -21,7 +21,3 @@
   transition: all 0.5s ease-out;
   opacity: 30%;
 }
-
-.hovered{
-  opacity: 100%;
-}
