@@ -19,7 +19,7 @@ g_eval_prompt = """두 사람 간의 대화가 주어집니다. 다음의 지시
 평가 기준:
 - 이해 가능성 (0 - 1): Instruction에 기반하여 Response를 이해 할 수 있나요?
 - 자연스러움 (1 - 5): 사람이 자연스럽게 말할 법한 Instruction 인가요?
-- 맥락 유지 (1 - 5): Istruction을 고려했을 때 Response가 맥락을 유지하나요?
+- 맥락 유지 (1 - 5): Instruction을 고려했을 때 Response가 맥락을 유지하나요?
 - 흥미롭기 (1 - 5): Response가 지루한가요, 아니면 흥미로운가요?
 - Instruction 사용 (0 - 1): Instruction에 기반하여 Response를 생성 했나요?
 - 공감 능력 (0 - 1): Response에 Instruction의 내용에 기반한 공감의 내용이 있나요?
