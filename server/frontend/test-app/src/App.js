@@ -1,9 +1,9 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import packageJson from '../package.json'
+import packageJson from '../package.json';
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSpinner, faArrowTurnDown, faEraser } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSpinner, faArrowTurnDown, faEraser, faEllipsis } from '@fortawesome/free-solid-svg-icons';
 
 import './App.css';
 import Message from './message';
@@ -13,20 +13,22 @@ axios.defaults.withCredentials = true;
 
 function App() {
 
-  const [msg_text, setMsgText] = useState('')     // input박스에 입력된 유저 메시지
-  const [user_id , setUserID ] = useState('')     // cookie에 저장된 유저 해시(최초 접속시 비어있음)
-  const [msg_list, setMsgList] = useState(null);  // 전체 메시지 히스토리
-  const [showing , setShowing] = useState(false); // 페이지 로딩중 여부
+  const [msg_text,    setMsgText   ] = useState('');     // input박스에 입력된 유저 메시지
+  const [user_id ,    setUserID    ] = useState('');     // cookie에 저장된 유저 해시(최초 접속시 비어있음)
+  const [msg_list,    setMsgList   ] = useState(null);   // 전체 메시지 히스토리
+  const [showing ,    setShowing   ] = useState(false);  // 페이지 로딩중 여부
+  const [generating,  setGenerating] = useState(false);  // 메시지 생성중 스피너
 
   const getMsg = async () => {
     await axios.get(
       '/'
-      ).then(response =>{
+      ).then((response) =>{
+        console.log(response);
         setMsgList(response.data.msg_list);
         setUserID(response.data.user_id);
         setShowing(true);
     })
-    .catch(error => {
+    .catch((error) => {
       console.error('error', error);
       setMsgList('error');
     });
@@ -36,25 +38,27 @@ function App() {
     if (msg_text) {
       setMsgList(prev => [...prev, {msg_text: msg_text, bot: false}]);
       var current_msg_text = msg_text;
-      setMsgText('')
+      setMsgText('');
+      setGenerating(true);
       await axios.post(
-            '/',
-            {
-                user_id: user_id,
-                msg_text: current_msg_text,
-                bot: false
+        '/', // path
+        { // data
+            user_id: user_id,
+            msg_text: current_msg_text,
+            bot: false
+        },
+        { // config
+            headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json"
             },
-            {
-                headers: {
-                    "Content-Type": "application/json",
-                    Accept: "application/json"
-                },
-            }
-        ).then((response) => {
-            setMsgList(prev => [...prev, response.data]);
-        }).catch((error) => {
-            console.log(error);
-        });
+        }
+      ).then((response) => {
+        setGenerating(false);
+        setMsgList(prev => [...prev, response.data]);
+      }).catch((error) => {
+        console.log(error);
+      });
     }
   };
 
@@ -72,17 +76,17 @@ function App() {
     axios.delete(
       '/'
     ).then((response) =>{
-      console.log(response)
+      console.log(response);
       setMsgText('');
       getMsg();
     }
     ).catch((error) => {
-      console.log(error)
+      console.log(error);
     });
   };
 
   useEffect(() => {
-    getMsg()
+    getMsg();
   }, []);
 
   if (showing){
@@ -92,8 +96,14 @@ function App() {
           <div>
             {msg_list.map(msg =>(
               <Message msg={msg}/>
-          ))}</div>
-          <div className="msg_input" key='msg_input'>
+            ))}
+            { generating === true &&
+              <div align="left" style={{width: '60vw', padding: '20px'}}>
+                <FontAwesomeIcon className='generation' icon={faEllipsis} fade size='xs' style={{color: "#000000"}} />
+              </div>
+            }
+          </div>
+          <div className="msg_input" key='msg_input' style={{width: '60vw', padding: '10px'}}>
                 <input
                     type='text'
                     required={true}
@@ -102,18 +112,22 @@ function App() {
                     onChange={onInputValChange}
                     onKeyUp={onInputKey}
                     value={msg_text}
-                    style={{border: 'none', outline: 'none', width: '60vw', background: 'none'}}
+                    style={{border: 'none', outline: 'none', width: '55vw', background: 'none', padding: '0px'}}
                 />
                 <button
                     onClick={postMsg}
-                    style={{border: 'none', outline: 'none', background: 'none'}}>
-                    <FontAwesomeIcon icon={faArrowTurnDown} rotation={90} style={{color: "#000000",}} />
+                    style={{width: '5vw', padding: '0px', border: 'none', outline: 'none', background: 'none'}}>
+                    <FontAwesomeIcon icon={faArrowTurnDown} rotation={90} style={{color: "#000000"}} />
                 </button>
             </div>
-                {/* TODO: add callback func */}
+            <div style={{padding: '50px', paddingTop: '100px'}}>
                 {/* TODO: add hover animation */}
-                <FontAwesomeIcon className='Eraser' icon={faEraser} style={{color: "#000000", padding: '50px'}} onClick={deleteMsg} />
-        파이렝...
+                <FontAwesomeIcon className='Eraser'
+                                 icon={faEraser}
+                                 style={{color: "#000000"}}
+                                 onClick={deleteMsg} /><br/>
+                <p style={{fontSize:'0.5em'}}>대화 초기화</p>              
+            </div>
         </header>
       </div>
     );
