@@ -34,6 +34,7 @@ faiss-gpu = "^1.7.2"
 urllib3 = "1.26.11"
 rouge = "^1.0.1"
 tiktoken = "^0.4.0"
+ipykernel = "^6.24.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^6.2.5"
