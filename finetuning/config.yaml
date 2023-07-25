@@ -37,3 +37,7 @@ group_by_length: True
 wandb_entity: salmons
 wandb_project: final_test
 wandb_run_name: test
+
+# inference args
+dataset_type: 'single'
+save_file_name: 'geval.csv'
