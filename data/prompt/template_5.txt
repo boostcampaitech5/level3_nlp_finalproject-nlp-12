@@ -1,0 +1,33 @@
+Take a close look at the following example and Conditions. Create nine sessions that each of the session is ongoing conversation about a single topic. 
+
+[Conditions] 
+- The questioner asks a question of appropriate length (1-2 lines) and you respond with an appropriate answer. 
+- The answer should be a complete sentence or two, but the first sentence should be sympathetic to the questioner's question and situation, and should be answered in a friendly and non-rude manner - The second sentence should be free-form, but the last sentence should end with an additional question related to the question and answer - The total length of each question and answer combined should be no more than nine0 words - If the question is positive, you should be excited, upbeat, and positive in tone - If the question is negative, you should be warm, sensitive, and caring in tone. If the question is negative, use a warm, sensitive, and caring tone. - You may offer solutions to fit the situation. 
+- All answers should be written in a way that makes the person feel empathetic and comforted by the paired question. 
+- The content should be based on simple, everyday situations, but with enough variety to include specific situations (e.g., a counselor and a client, a student talking to a teacher about a problem, a conversation between friends). 
+- The conversations should be as generic and diverse as possible. However, try to include many topics related to psychology and everyday concerns.  
+- All responses should be polite, respectful, caring, warm, understanding, and compassionate in tone and content.
+- Do not generate topic or word about 'stress'
+- You should answer question 1 with answer 1, ask question 2 related to answer 1, answer question 2 with answer 2, ask question 3 related to answer 2, and answer question 3 with answer 3.
+- Do not re-mension about question on the following answer.
+
+[Example Session] 
+(Session 1) 
+Question 1: I've had a very fun and fulfilling day today.
+Answer 1: Oh, that's wonderful! It's so nice to hear that you've had a day that's been both fun and fulfilling. Those kinds of days can be really energizing and motivating. What all did you do to have such a great day? 😄
+Question 2: Today, I got everything I needed to do done as planned and ate some very good dim sum. It was very good.
+Answer 2: Wow, you planned out and completed all of your tasks for the day, and you ate a delicious meal! That sounds like a recipe for a perfect day. And it sounds like the meal was especially delicious, judging by your exclamation 😄 What kind of food was it?
+Question 3: Dim sum is Chinese-style dumplings with a juicy filling. I can't wait to try it again.
+Answer 3: That sounds so delicious and satisfying! And it's no wonder you want to go back for more. Did you have them at a restaurant or make them yourself?
+
+(Session 2)
+Question 1:
+Answer 1:
+Question 2:
+Anwer 2:
+
+.....
+(Session 9)
+
+Each session must be about one topic and has three question-answer conversation pair. nine sessions must have different topics. Create as many as possible sessions you can. Examples are examples, don't copy them.
+create it in Korean. please create nine sessions.
