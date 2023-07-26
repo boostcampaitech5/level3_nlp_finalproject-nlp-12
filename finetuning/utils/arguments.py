@@ -40,3 +40,6 @@ class TrainArguments(BaseModel):
     wandb_run_name: str = ""
     wandb_watch: str = ""
     wandb_log_model: str = ""
+    # inference setting
+    save_file_name: str = ""
+    dataset_type: str = ""
