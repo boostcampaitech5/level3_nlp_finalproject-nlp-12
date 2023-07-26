@@ -23,7 +23,6 @@ node_modules/
 __init__.py
 test*.json
 *prompt*.txt
-eda.ipynb
 simple_inference.ipynb
 langchain_inference_*.ipynb
 inference_*.py
