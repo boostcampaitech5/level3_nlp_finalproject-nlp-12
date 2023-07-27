@@ -87,6 +87,10 @@ function App() {
   };
 
   useEffect(() => {
+    getMsg();
+  }, []);
+
+  useEffect(() => {
     focusRef.current?.scrollIntoView({ block: 'center',  behavior: 'smooth' });
   }, [msg_list, showing, generating]);
 
