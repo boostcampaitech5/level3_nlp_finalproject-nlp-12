@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import packageJson from '../package.json';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -19,16 +19,17 @@ function App() {
   const [showing ,    setShowing   ] = useState(false);  // 페이지 로딩중 여부
   const [generating,  setGenerating] = useState(false);  // 메시지 생성중 스피너
 
+  const focusRef = useRef(null);
+
   const getMsg = async () => {
     await axios.get(
       '/'
-      ).then((response) =>{
+    ).then((response) =>{
         console.log(response);
         setMsgList(response.data.msg_list);
         setUserID(response.data.user_id);
         setShowing(true);
-    })
-    .catch((error) => {
+    }).catch((error) => {
       console.error('error', error);
       setMsgList('error');
     });
@@ -86,8 +87,8 @@ function App() {
   };
 
   useEffect(() => {
-    getMsg();
-  }, []);
+    focusRef.current?.scrollIntoView({ block: 'center',  behavior: 'smooth' });
+  }, [msg_list, showing, generating]);
 
   if (showing){
     return (
@@ -107,6 +108,7 @@ function App() {
                 <input
                     type='text'
                     required={true}
+                    ref={focusRef}
                     placeholder='메시지를 입력해보세요.'
                     autoFocus={true}
                     onChange={onInputValChange}
@@ -135,7 +137,7 @@ function App() {
     return(
       <div className="App" key='App'>
         <header className="App-header">
-          <FontAwesomeIcon icon={faSpinner} spinPulse size='3x' style={{color: "#dedede",}} />
+          <FontAwesomeIcon ref={focusRef} icon={faSpinner} spinPulse size='3x' style={{color: "#dedede",}} />
         </header>
       </div>
     );
