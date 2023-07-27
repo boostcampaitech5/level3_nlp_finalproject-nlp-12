@@ -1,21 +1,58 @@
 @font-face {
-  font-family: 'LeeSeoyun';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2202-2@1.0/LeeSeoyun.woff') format('woff');
+  font-family: 'NanumSquareRound';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_two@1.0/NanumSquareRound.woff') format('woff');
   font-weight: normal;
   font-style: normal;
 }
 
 body {
   margin: 0;
-  /* font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', */
-    /* 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', */
-    /* sans-serif; */
-  font-family: 'LeeSeoyun';
+  font-family: 'NanumSquareRound';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+body::-webkit-scrollbar{
+  visibility: hidden;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+.scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.op2 {
+  animation: op2 2s infinite;
+}
+
+.floating {
+  animation-delay: 0.5;
+  animation: floating 2s;
+}
+
+@keyframes floating {
+  0% {
+    opacity: 0;
+  }
+}
+
+@keyframes op2 {
+  50% {
+    opacity: 0;
+  }
+}
+
+input, select, textarea {
+  color:rgb(0, 0, 0);
+  font-size: 0.7em;
+  font-family: 'NanumSquareRound';
+  resize:inherit
+}
+
+input::placeholder {
+  color:rgba(0, 0, 0, 0.5);
 }
