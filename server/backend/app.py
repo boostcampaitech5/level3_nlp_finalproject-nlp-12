@@ -1,5 +1,5 @@
 from fastapi import FastAPI, Cookie, Response, status
-from fastapi.responses import JSONResponse, RedirectResponse
+from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pymongo import MongoClient
 import uvicorn
@@ -39,8 +39,8 @@ async def startup():
     
     # 개별 메시지 저장 collection 설정
     app.user_data      = app.mongodb[settings.DatabaseSetting.COLLECTION]
-    app.message_store  = app.mongodb[settings.ModelSetting.COLLECTION]
-    
+    app.message_store  = app.mongodb[settings.ModelSetting.VECTOR_INDEX_COLLECTION]
+
     # 모델 로드 및 초기화
     app.mary = Mary(settings.ModelSetting, app.mongodb)
 
@@ -99,7 +99,7 @@ def message_input(request: MsgModel) -> JSONResponse:
 
 
 @app.delete('/')
-def reset_conversation(response: Response, user_id: Optional[str] = Cookie(None)) -> RedirectResponse:
+def reset_conversation(response: Response, user_id: Optional[str] = Cookie(None)) -> Response:
     '''
     TO-DO: 현재 유저 초기화 및 DB에서 해당 유저 메시지 삭제
     '''

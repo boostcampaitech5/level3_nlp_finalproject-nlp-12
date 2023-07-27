@@ -33,11 +33,11 @@ class ModelSettings(BaseSettings):
     MODEL_NAME: str = Field(default_factory=lambda: os.getenv('MODEL_NAME', ''))
     MODEL_PATH: str = Field(default_factory=lambda: os.getenv('MODEL_PATH', ''))
     EMBEDDING_SIZE: int = Field(default_factory=lambda: os.getenv('EMBEDDING_SIZE', 1536))
-    COLLECTION: str = Field(default_factory=lambda: os.getenv('MODEL_COLLECTION', 'message_store'))
+    VECTOR_INDEX_COLLECTION: str = Field(default_factory=lambda: os.getenv('VECTOR_INDEX_COLLECTION', 'message_store'))
     OPENAI_API_KEY: str = Field(default_factory=lambda: os.getenv('OPENAI_API_KEY', ''))
 
 
-class Settings(CommonSettings, ServerSettings, DatabaseSettings, ModelSettings):
+class Settings:
     """여러 설정을 모아두는 역할."""
     CommonSetting: CommonSettings = CommonSettings()
     ServerSetting: ServerSettings = ServerSettings()

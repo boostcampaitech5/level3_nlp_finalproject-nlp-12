@@ -101,7 +101,7 @@ class Mary:
             openai_api_key=settings.OPENAI_API_KEY
         )
 
-        collection = mongodb_client[settings.COLLECTION]
+        collection = mongodb_client[settings.VECTOR_INDEX_COLLECTION]
         self.vectorstore = MongoDBAtlasVectorSearch(
             collection, embedding_fn
         )
@@ -116,8 +116,6 @@ class Mary:
     def get_response(self, question:str, user_id:str) -> str:
         input_dict = {'### 명령어': question}
         timestamp = float(time.time())
-
-        print(user_id, timestamp)
 
         res = ConversationChain(
             llm=self.local_llm,
