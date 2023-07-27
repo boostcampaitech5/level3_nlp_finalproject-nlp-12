@@ -34,3 +34,4 @@ train_nohup_*.sh
 finetune_*.sh
 merge_lora*.sh
 .env
+package-lock.json
