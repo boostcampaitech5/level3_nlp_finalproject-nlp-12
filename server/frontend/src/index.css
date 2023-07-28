@@ -1,13 +1,16 @@
 @font-face {
-  font-family: 'NanumSquareRound';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_two@1.0/NanumSquareRound.woff') format('woff');
-  font-weight: normal;
+  font-family: 'GowunBatang-Regular';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2108@1.1/GowunBatang-Regular.woff') format('woff');
+  font-weight: 400, 700;
   font-style: normal;
+}
+
+body, input, select, textarea {
+  font-family: 'GowunBatang-Regular';
 }
 
 body {
   margin: 0;
-  font-family: 'NanumSquareRound';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -49,9 +52,9 @@ code {
 input, select, textarea {
   color:rgb(0, 0, 0);
   font-size: 0.7em;
-  font-family: 'NanumSquareRound';
   resize:inherit
 }
+
 
 input::placeholder {
   color:rgba(0, 0, 0, 0.5);

@@ -9,8 +9,8 @@ function Message({msg}) {
             <div className='backdrop floating'
                  align="left"
                  key={component_id}
-                 style={{width: '60vw', padding: '10px', fontWeight:800, fontSize:'0.7em'}}>
-                <p style={{margin: '0px', padding: '15px'}}>{msg.msg_text}</p>
+                 style={{width: '60vw', padding: '10px', fontSize:'0.7em'}}>
+                <p style={{fontWeight: 700, margin: '0px', padding: '15px', color: 'rgb(10,71,5)'}}>{msg.msg_text}</p>
             </div>
         );
     } else{
