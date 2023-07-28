@@ -1,0 +1,61 @@
+@font-face {
+  font-family: 'GowunBatang-Regular';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2108@1.1/GowunBatang-Regular.woff') format('woff');
+  font-weight: 400, 700;
+  font-style: normal;
+}
+
+body, input, select, textarea {
+  font-family: 'GowunBatang-Regular';
+}
+
+body {
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body::-webkit-scrollbar{
+  visibility: hidden;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.op2 {
+  animation: op2 2s infinite;
+}
+
+.floating {
+  animation-delay: 0.5;
+  animation: floating 2s;
+}
+
+@keyframes floating {
+  0% {
+    opacity: 0;
+  }
+}
+
+@keyframes op2 {
+  50% {
+    opacity: 0;
+  }
+}
+
+input, select, textarea {
+  color:rgb(0, 0, 0);
+  font-size: 0.7em;
+  resize:inherit
+}
+
+
+input::placeholder {
+  color:rgba(0, 0, 0, 0.5);
+}

@@ -1,0 +1,8 @@
+@misc{kullm,
+  author = {NLP & AI Lab and Human-Inspired AI research},
+  title = {KULLM: Korea University Large Language Model Project},
+  year = {2023},
+  publisher = {GitHub},
+  journal = {GitHub repository},
+  howpublished = {\url{https://github.com/nlpai-lab/kullm}},
+}
