@@ -17,6 +17,7 @@ class ServerSettings(BaseSettings):
     HOST: str = Field(default_factory=lambda: os.getenv('HOST', '0.0.0.0'))
     PORT: int = Field(default_factory=lambda: os.getenv('PORT', 8000))
     REACT_PORT: int = Field(default_factory=lambda: os.getenv('REACT_PORT', 3000))
+    HOST_IP: str = Field(default_factory=lambda: os.getenv('HOST_IP', '0.0.0.0'))
 
 
 class DatabaseSettings(BaseSettings):

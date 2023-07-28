@@ -19,7 +19,7 @@ app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
     allow_origins       = [f'http://localhost:{settings.ServerSetting.REACT_PORT}',
-                           f'http://{settings.ServerSetting.HOST}:{settings.ServerSetting.REACT_PORT}'],
+                           f'http://{settings.ServerSetting.HOST_IP}:{settings.ServerSetting.REACT_PORT}'],
     allow_credentials   = True,
     allow_methods       = ['GET', 'POST', 'OPTIONS', 'DELETE'],
     allow_headers       = ['*']
