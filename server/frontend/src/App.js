@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import packageJson from '../package.json';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -19,16 +19,17 @@ function App() {
   const [showing ,    setShowing   ] = useState(false);  // 페이지 로딩중 여부
   const [generating,  setGenerating] = useState(false);  // 메시지 생성중 스피너
 
+  const focusRef = useRef(null);
+
   const getMsg = async () => {
     await axios.get(
       '/'
-      ).then((response) =>{
+    ).then((response) =>{
         console.log(response);
         setMsgList(response.data.msg_list);
         setUserID(response.data.user_id);
         setShowing(true);
-    })
-    .catch((error) => {
+    }).catch((error) => {
       console.error('error', error);
       setMsgList('error');
     });
@@ -73,6 +74,7 @@ function App() {
   }
 
   const deleteMsg = () => { // reset버튼을 위한 callback 함수 프로토타입
+    setShowing(false);
     axios.delete(
       '/'
     ).then((response) =>{
@@ -89,11 +91,20 @@ function App() {
     getMsg();
   }, []);
 
+  useEffect(() => {
+    focusRef.current?.scrollIntoView({ behavior: 'smooth' , block: 'center' });
+  }, [msg_list, showing, generating]);
+
   if (showing){
     return (
       <div className="App" key='App'>
-        <header className="App-header">
-          <div>
+        <header className="header">
+          <div style={{width:'60vw', padding:'10px', alignItems:'center'}}>
+            <img src='./mary.svg' style={{width:'5vw', padding:'10px'}} />
+          </div>
+        </header>
+        <div className="App-header" style={{minHeight:'200vh'}}>
+          <div style={{width:'60vw'}}>
             {msg_list.map(msg =>(
               <Message msg={msg}/>
             ))}
@@ -102,41 +113,50 @@ function App() {
                 <FontAwesomeIcon className='generation' icon={faEllipsis} fade size='xs' style={{color: "#000000"}} />
               </div>
             }
-          </div>
-          <div className="msg_input" key='msg_input' style={{width: '60vw', padding: '10px'}}>
-                <input
-                    type='text'
+          <div ref={focusRef}></div>
+          <div className="msg_input" key='msg_input' style={{width: '60vw', padding: '10px', alignContent:'center'}}>
+                <textarea
                     required={true}
-                    placeholder='메시지를 입력해보세요.'
+                    placeholder='마리에게 말을 걸어 보세요(최대 200자).'
                     autoFocus={true}
                     onChange={onInputValChange}
                     onKeyUp={onInputKey}
+                    maxLength={200}
+                    rows={5}
                     value={msg_text}
-                    style={{border: 'none', outline: 'none', width: '55vw', background: 'none', padding: '0px'}}
+                    style={{border: 'none', outline: 'none', width: '59vw', marginTop:'5vh', background: 'none', padding: '0px'}}
                 />
                 <button
                     onClick={postMsg}
-                    style={{width: '5vw', padding: '0px', border: 'none', outline: 'none', background: 'none'}}>
+                    style={{width: '1vw', padding: '0px', border: 'none', outline: 'none', background: 'none'}}>
                     <FontAwesomeIcon icon={faArrowTurnDown} rotation={90} style={{color: "#000000"}} />
                 </button>
             </div>
-            <div style={{padding: '50px', paddingTop: '100px'}}>
-                {/* TODO: add hover animation */}
-                <FontAwesomeIcon className='Eraser'
-                                 icon={faEraser}
-                                 style={{color: "#000000"}}
-                                 onClick={deleteMsg} /><br/>
-                <p style={{fontSize:'0.5em'}}>대화 초기화</p>              
+          </div>
+            <div className='bottom'>
+              <div className='tooltip' style={{padding: '20px'}}>
+                  {/* TODO: add hover animation */}
+                  <FontAwesomeIcon className='Eraser'
+                                  icon={faEraser}
+                                  style={{color: "#000000"}}
+                                  onClick={deleteMsg} /><br/>
+                  <span className='tooltiptext'>대화 지우기</span>           
+              </div>
             </div>
-        </header>
+            {/* <div className='footer'>
+              MyMary by Smoked_Salmons<br/>
+              boostcamp AI Tech 5th
+            </div> */}
+        </div>
       </div>
     );
   } else{
     return(
       <div className="App" key='App'>
-        <header className="App-header">
-          <FontAwesomeIcon icon={faSpinner} spinPulse size='3x' style={{color: "#dedede",}} />
-        </header>
+        <div className="App-header" style={{height:'100vh'}}>
+          {/* <FontAwesomeIcon ref={focusRef} icon={faSpinner} spinPulse size='3x' style={{color: "#dedede"}} /> */}
+          <img ref={focusRef} src='mary.svg' className='op2' width='200vw'/>
+        </div>
       </div>
     );
   };
