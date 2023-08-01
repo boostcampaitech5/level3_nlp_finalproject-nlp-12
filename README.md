@@ -8,14 +8,14 @@
 [[**마리와 대화하기**](http://mymary.o-r.kr:30007)]
 
 ## 1. 프로젝트 데모 Project Demo
-<img src="assets/video/demo.gif" width="800" alt="demo">
+<img src="assets/video/demo.gif" width="700" alt="demo">
 
 ## 2. 팀 & 역할 Team & Roles
 |공통|문지혜|박경택|박지은|송인서|윤지환|
 |:---:|:---:|:---:|:---:|:---:|:---:|
-|<img src="assets/image/smoked_salmon.png" width="120" height="120" alt="smoked_salmon">|<img src="https://avatars.githubusercontent.com/u/85336141?v=4" width="120" height="120">|<img src="https://avatars.githubusercontent.com/u/97149910?v=4" width="120" height="120">|<img src="https://avatars.githubusercontent.com/u/97666193?v=4" width="120" height="120">|<img src="https://avatars.githubusercontent.com/u/41552919?v=4" width="120" height="120">|<img src="https://avatars.githubusercontent.com/u/37128004?v=4" width="120" height="120">|
+|<img src="assets/image/smoked_salmon.png" width="80" height="80" alt="smoked_salmon">|<img src="https://avatars.githubusercontent.com/u/85336141?v=4" width="80" height="80">|<img src="https://avatars.githubusercontent.com/u/97149910?v=4" width="80" height="80">|<img src="https://avatars.githubusercontent.com/u/97666193?v=4" width="80" height="80">|<img src="https://avatars.githubusercontent.com/u/41552919?v=4" width="80" height="80">|<img src="https://avatars.githubusercontent.com/u/37128004?v=4" width="80" height="80">|
 ||[![GitHub Badge](https://img.shields.io/badge/-GitHub-black?style=flat-square&logo=github&link=https://github.com/jihye-moon)](https://github.com/jihye-moon)|[![GitHub Badge](https://img.shields.io/badge/-GitHub-black?style=flat-square&logo=github&link=https://github.com/afterthougt)](https://github.com/afterthougt)|[![GitHub Badge](https://img.shields.io/badge/-GitHub-black?style=flat-square&logo=github&link=https://github.com/iamzieun)](https://github.com/iamzieun)|[![GitHub Badge](https://img.shields.io/badge/-GitHub-black?style=flat-square&logo=github&link=https://github.com/fortunetiger)](https://github.com/fortunetiger)|[![GitHub Badge](https://img.shields.io/badge/-GitHub-black?style=flat-square&logo=github&link=https://github.com/ohilikeit)](https://github.com/ohilikeit)|
-|데이터 생성 및 검수 <br> 모델 별 실험|Evaluation Metric Research <br> Evaluation 전략설계|Prompt Engineering <br> LangChain 연동 <br> 발표|개발환경 구성 <br> Baseline code 작성 <br> 데이터 EDA <br> 발표|LangChain 연동 <br> FE/BE 구현 <br> DB 연결|PM <br> Baseline code 작성 <br> 데이터 취합 및 전처리 <br> LangChain 연동|
+|데이터 생성 <br> 데이터 검수 <br> 모델 별 실험|평가 지표 리서치 <br> 평가 전략 설계|프롬프트 엔지니어링 <br> LangChain 연동 <br> 발표|개발환경 구성 <br> 베이스라인 작성 <br> 데이터 EDA <br> 발표|FE/BE 구현 <br> DB 연결 <br> LangChain 연동|**PM** <br> 베이스라인 작성 <br> 데이터 취합 <br> 데이터 전처리 <br> LangChain 연동|
 
 
 ## 3. 실행 방법 How-to-Run
@@ -25,32 +25,32 @@ poetry shell
 ```
 
 ### Finetuning
-In the `finetuning` directory,
+`finetuning` 디렉토리에서
 ```bash
 python train.py
 ```
 
 ### Merge QLoRA layer into LLM backbone
-In the `finetuning` directory,
+`finetuning` 디렉토리에서
 ```bash
 python merge_lora.py
 ```
 
 ### Inference
-In the `finetuning` directory,
+`finetuning` 디렉토리에서
 ```bash
 python inference.py
 ```
 
 ### Server
 #### Backend
-In the `server/backend` directory,
+`server/backend` 디렉토리에서
 ```bash
 python app.py
 ```
 
 #### Frontend
-In the `server/frontend` directory,
+`server/frontend` 디렉토리에서
 ```bash
 npm install
 ```
@@ -84,13 +84,14 @@ LoRA 기법에 4-bit quantization, double quantization, paged optimizer 등의 �
 
 ## 7. 평가 Evaluation
 평가를 위해 비교한 모델은 한국어 LLM 3가지(모델 파라미터수 7B, ~13B)와 현재 서비스 중인 GPT-3.5 모델(모델 파라미터 수 175B)입니다.
-### Human Evaluation
-평가 항목은 크게 (1) 기초 능력, (2) 공감, (3) 맥락 유지, (4) 질문 항목으로 나뉩니다.
-![human_eval](assets/image/eval_human.png)
 
 ### G-Eval
 G-eval 논문을 참고하여 6가지 항목을 선정하고, 추가적으로 (1) 공감 능력, (2) 대화 유도 항목을 추가하여 평가하였습니다.
 ![g-eval](assets/image/eval_geval.png)
+
+### Human Evaluation
+평가 항목은 크게 (1) 기초 능력, (2) 공감, (3) 맥락 유지, (4) 질문 항목으로 나뉩니다. 각각의 항목은 다시 두세 항목으로 세분류하여 평가를 진행하였습니다.
+![human_eval](assets/image/eval_human.png)
 
 ## 8. 서빙 Serving
 서빙 파트의 자세한 내용은 `server/` 디렉토리의 [README](https://github.com/boostcampaitech5/level3_nlp_finalproject-nlp-12/server/README.md)를 참고해주세요.
@@ -98,7 +99,7 @@ G-eval 논문을 참고하여 6가지 항목을 선정하고, 추가적으로 (1
 ## 9. 공개 링크 Public Links
 [Presentation](docs/[최종]NLP_12조_내마리%20내%20마음을%20들여다%20보는%20챗봇.pdf)
 
-## 10. Reference
+## 10. 참고문헌 Reference
 - [A Technical Report for Polyglot-Ko: Open-Source Large-Scale Korean Language Models](https://arxiv.org/abs/2306.02254)
 - [GPT-NeoX-20B: An Open-Source Autoregressive Language Model](https://arxiv.org/abs/2204.06745)
 - [Few-Shot Parameter-Efficient Fine-Tuning is Better and Cheaper than In-Context Learning](https://arxiv.org/abs/2205.05638)
