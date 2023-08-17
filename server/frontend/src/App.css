@@ -4,7 +4,6 @@
 
 .App-header {
   background-color: rgb(227, 235, 210);
-  /* background-image: url('https://images.pexels.com/photos/16762854/pexels-photo-16762854/free-photo-of-delicate-decorative-flowers.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'); */
   background-size: 100%;
   background-repeat: no-repeat;
   background-attachment: fixed;
@@ -30,15 +29,6 @@
   justify-content: center;
 }
 
-.Eraser {
-  transition: opacity .5s;
-  opacity: 30%;
-}
-
-.Eraser:hover {
-  opacity: 100%;
-}
-
 .header {
   z-index: 1;
   position: fixed;
@@ -50,6 +40,13 @@
   backdrop-filter: blur(10px);
 }
 
+.footer {
+  background-color: aquamarine;
+  text-align: center;
+  margin-top: 30vh;
+  font-size: 0.3em;
+}
+
 .backdrop {
   backdrop-filter: blur(10px);
   background-color: rgba(255, 255, 255, 0.2);
@@ -57,6 +54,16 @@
   border-radius: 15px;
 }
 
+.Eraser {
+  transition: opacity .5s;
+  opacity: 30%;
+}
+
+.Eraser:hover {
+  opacity: 100%;
+}
+
+/* tooltip */
 .tooltip {
   position: relative;
   display: inline-block;
@@ -94,11 +101,4 @@
 
 .tooltip:hover .tooltiptext {
   visibility: visible;
-}
-
-.footer {
-  background-color: aquamarine;
-  text-align: center;
-  margin-top: 30vh;
-  font-size: 0.3em;
 }
