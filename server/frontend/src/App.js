@@ -3,7 +3,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import packageJson from '../package.json';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSpinner, faArrowTurnDown, faEraser, faEllipsis } from '@fortawesome/free-solid-svg-icons';
+import { faArrowTurnDown, faEraser, faEllipsis } from '@fortawesome/free-solid-svg-icons';
 
 import './App.css';
 import Message from './message';
